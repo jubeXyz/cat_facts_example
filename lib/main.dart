@@ -1,29 +1,9 @@
-import 'dart:convert';
-
+import 'package:cat_facts_example/cat_api_repository.dart';
+import 'package:cat_facts_example/cat_data_model.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 
 void main() {
   runApp(const MainApp());
-}
-
-const uriString = 'https://meowfacts.herokuapp.com/';
-
-Future<String> getDataFromApi() async {
-  final response = await get(Uri.parse(uriString));
-
-  return response.body;
-}
-
-Future<String> getCatFact() async {
-  final jsonString = await getDataFromApi();
-  debugPrint(jsonString);
-
-  final jsonObject = jsonDecode(jsonString);
-
-  final catFact = jsonObject['data'][0];
-
-  return catFact;
 }
 
 class MainApp extends StatefulWidget {
@@ -34,7 +14,26 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  String catFact = "None fetched yet";
+  late List<CatDataModel?> catList = [];
+  final CatApiRepository catApiRepository = CatApiRepository();
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  Future<void> getData() async {
+    try {
+      final List<CatDataModel?> fetchedCatData =
+          await catApiRepository.fetchCatData();
+      setState(() {
+        catList = fetchedCatData;
+      });
+    } catch (e) {
+      print("Failed to fetch data $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +46,17 @@ class _MainAppState extends State<MainApp> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(catFact),
-                  const SizedBox(height: 16),
+                  for (var catData in catList)
+                    if (catData is CatImageModel)
+                      Image.network(
+                        catData.url!,
+                      )
+                    else if (catData is CatFactModel)
+                      Text(catData.data!),
                   OutlinedButton(
-                    onPressed: getFact,
+                    onPressed: () {
+                      getData();
+                    },
                     child: const Text("Get Random Cat Fact"),
                   ),
                 ],
@@ -60,10 +66,5 @@ class _MainAppState extends State<MainApp> {
         ),
       ),
     );
-  }
-
-  void getFact() async {
-    catFact = await getCatFact();
-    setState(() {});
   }
 }
