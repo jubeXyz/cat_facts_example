@@ -7,6 +7,7 @@ class CatFactRepository {
 
   Future<String> getCatFact() async {
     final jsonString = await getDataFromApi(catFactUri);
+    await Future.delayed(const Duration(seconds: 3));
 
     final jsonObject = jsonDecode(jsonString);
 

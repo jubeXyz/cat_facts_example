@@ -1,16 +1,10 @@
-import 'package:cat_facts_example/features/main_screen/data/cat_fact_repository.dart';
-import 'package:cat_facts_example/features/main_screen/data/cat_image_url_repository.dart';
+import 'package:cat_facts_example/features/cat_main_screen/application/cat_service.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({
-    super.key,
-    required this.catFactRepository,
-    required this.catImageUrlRepository,
-  });
+  const MainScreen({super.key, required this.catService});
 
-  final CatFactRepository catFactRepository;
-  final CatImageUrlRepository catImageUrlRepository;
+  final CatService catService;
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -38,8 +32,7 @@ class _MainScreenState extends State<MainScreen> {
                   const SizedBox(height: 16),
                   OutlinedButton(
                     onPressed: () {
-                      getFact();
-                      getImageUri();
+                      getCatData();
                     },
                     child: const Text("Get Random Cat Fact"),
                   ),
@@ -52,13 +45,10 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  void getImageUri() async {
-    catImageUri = await widget.catImageUrlRepository.getCatImageUrl();
-    setState(() {});
-  }
-
-  void getFact() async {
-    catFact = await widget.catFactRepository.getCatFact();
+  void getCatData() async {
+    final catData = await widget.catService.getCatData();
+    catImageUri = catData.imageUrl;
+    catFact = catData.catFact;
     setState(() {});
   }
 }

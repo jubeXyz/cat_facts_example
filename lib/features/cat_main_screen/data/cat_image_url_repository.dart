@@ -7,6 +7,7 @@ class CatImageUrlRepository {
 
   Future<String> getCatImageUrl() async {
     final jsonString = await getDataFromApi(catImageUri);
+    await Future.delayed(const Duration(seconds: 3));
 
     final jsonObject = jsonDecode(jsonString);
 
