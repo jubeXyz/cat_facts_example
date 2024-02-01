@@ -9,17 +9,16 @@ class CatApiService {
       final Response response = await get(Uri.parse(url));
 
       if (response.statusCode == 200) {
-        final List<dynamic> apiData = json.decode(response.body);
+        final apiData = json.decode(response.body);
 
         if (url.contains("thecatapi")) {
           return CatImageModel(url: apiData[0]["url"]);
         } else if (url.contains("meowfacts")) {
-          return CatFactModel(data: apiData["data"]);
-        } else {
-          throw Exception("Can't find Api Endpoint for $url");
+          final data = apiData["data"] as List<dynamic>;
+          return CatFactModel(data: data[0]);
         }
       } else {
-        throw Exception("Failed to load Cat data from $url");
+        throw Exception("Can't find Api Endpoint for $url");
       }
     } catch (e) {
       print("Failed to fetch Cat data from $url: $e");
