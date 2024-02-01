@@ -48,11 +48,19 @@ class _MainAppState extends State<MainApp> {
                 children: [
                   for (var catData in catList)
                     if (catData is CatImageModel)
-                      Image.network(
-                        catData.url!,
+                      Column(
+                        children: [
+                          Image.network(
+                            catData.url!,
+                          ),
+                          const SizedBox(height: 20),
+                        ],
                       )
                     else if (catData is CatFactModel)
-                      Text(catData.data!),
+                      Text(
+                        catData.data!,
+                      ),
+                  const SizedBox(height: 80),
                   OutlinedButton(
                     onPressed: () {
                       getData();
