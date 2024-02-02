@@ -31,7 +31,7 @@ class _MainAppState extends State<MainApp> {
         catList = fetchedCatData;
       });
     } catch (e) {
-      print("Failed to fetch data $e");
+      debugPrint("Failed to fetch data $e");
     }
   }
 

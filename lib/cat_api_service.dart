@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cat_facts_example/cat_data_model.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 class CatApiService {
@@ -21,7 +22,7 @@ class CatApiService {
         throw Exception("Can't find Api Endpoint for $url");
       }
     } catch (e) {
-      print("Failed to fetch Cat data from $url: $e");
+      debugPrint("Failed to fetch Cat data from $url: $e");
     }
     return null;
   }

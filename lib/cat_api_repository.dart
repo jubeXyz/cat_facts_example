@@ -1,5 +1,6 @@
 import 'package:cat_facts_example/cat_api_service.dart';
 import 'package:cat_facts_example/cat_data_model.dart';
+import 'package:flutter/material.dart';
 
 class CatApiRepository {
   Future<List<CatDataModel?>> fetchCatData() async {
@@ -18,7 +19,7 @@ class CatApiRepository {
       }
       return catList;
     } catch (e) {
-      print("Failed to fetch Cat data $e");
+      debugPrint("Failed to fetch Cat data $e");
       return [];
     }
   }
